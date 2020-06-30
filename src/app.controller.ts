@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Headers } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -11,8 +11,10 @@ export class AppController {
   }
 
   @Post()
-  async getWebhook(@Body() msg) {
-    console.log('msg', typeof msg, msg);
+  async getWebhook(@Body() msg, @Headers() headers) {
+    console.log('=== msg ===', typeof msg, msg);
+
+    console.log('=== headers ===', typeof headers, headers)
     
     return this.appService.sendMsg(msg)
   }
