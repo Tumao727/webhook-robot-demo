@@ -11,8 +11,9 @@ export class AppController {
   }
 
   @Post()
-  async getmsg(@Body() msg) {
-    return msg;
+  async getWebhook(@Body() msg) {
+    console.log('msg', msg)
+    return this.appService.sendMsg(msg);
   }
 
 
