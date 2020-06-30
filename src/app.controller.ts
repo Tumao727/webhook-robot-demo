@@ -15,7 +15,8 @@ export class AppController {
     console.log('=== msg ===', typeof msg, msg);
 
     console.log('=== headers ===', typeof headers, headers)
+    const type = headers['x-github-event']
     
-    return this.appService.sendMsg(msg)
+    return this.appService.sendMsg(msg, type)
   }
 }
