@@ -9,11 +9,17 @@ export class AppService {
   }
 
   sendMsg(param) {
+    const testInfo = {
+        "msgtype": "text",
+        "text": {
+          "content": "test test test!!!"
+        }
+    }
+
+    const json = JSON.stringify(testInfo)
     return this.httpService.post(
       'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=97967658-62ad-4ee8-9df7-0096e2c60452',
-      {
-        json: param
-      }
+      json
     );
   }
 }

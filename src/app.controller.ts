@@ -12,10 +12,10 @@ export class AppController {
 
   @Post()
   async getWebhook(@Body() msg) {
-    console.log('msg', msg)
-    return this.appService.sendMsg(msg);
+    console.log('msg', typeof msg, msg);
+
+    return 'success'
+    
+    // return this.appService.sendMsg(msg)
   }
-
-
-  
 }
