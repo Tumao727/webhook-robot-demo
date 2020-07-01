@@ -27,6 +27,8 @@ export class AppService {
       },
     };
 
+    console.log('--- type ---', type)
+
     if (type === 'issues') {
 
       const textMap = {
