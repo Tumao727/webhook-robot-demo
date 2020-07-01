@@ -14,7 +14,7 @@ export class AppService {
       'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=97967658-62ad-4ee8-9df7-0096e2c60452',
       json,
     ).pipe(map(res => {
-      console.log(res.data)
+      console.log('res data', res.data)
     }))
   }
 
