@@ -12,11 +12,8 @@ export class AppController {
 
   @Post()
   async getWebhook(@Body() msg, @Headers() headers) {
-    console.log('=== msg ===', typeof msg, msg);
-
-    console.log('=== headers ===', typeof headers, headers)
     const type = headers['x-github-event']
     
-    return this.appService.sendMsg(msg, type)
+    return this.appService.formatMsg(msg, type)
   }
 }

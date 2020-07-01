@@ -1,4 +1,5 @@
 import { Injectable, HttpService } from '@nestjs/common';
+import { map } from 'rxjs/operators'
 
 @Injectable()
 export class AppService {
@@ -8,7 +9,16 @@ export class AppService {
     return 'original information';
   }
 
-  sendMsg(param, type) {
+  private async sendMsg(json) {
+    return this.httpService.post(
+      'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=97967658-62ad-4ee8-9df7-0096e2c60452',
+      json,
+    ).pipe(map(res => {
+      console.log(res.data)
+    }))
+  }
+
+  public async formatMsg(param, type) {
     const testInfo = {
       msgtype: 'text',
       text: {
@@ -23,6 +33,9 @@ export class AppService {
         case 'assigned':
           text = `${param.issue.user.login} 将 issue (${param.issue.url}) 指给了${param.issue.assignee.login}`;
           break;
+        case 'unassigned':
+          text = `${param.issue.user.login} 解除了 issue (${param.issue.url}) 指派人`;
+          break;
         case 'closed':
           text = `${param.issue.user.login} 关闭了 issue (${param.issue.url})`
           break
@@ -33,14 +46,8 @@ export class AppService {
           text = `${param.issue.user.login} 提了新 issue (${param.issue.url})`;
       }
       testInfo.text.content = text;
-      
     }
 
-    const json = JSON.stringify(testInfo)
-    console.log('=== to see json ===', json)
-    // return this.httpService.post(
-    //   'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=97967658-62ad-4ee8-9df7-0096e2c60452',
-    //   json
-    // );
+    return await this.sendMsg(testInfo)
   }
 }
