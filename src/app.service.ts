@@ -9,6 +9,7 @@ export class AppService {
   private async _requestSendMsgToChatbot(json) {
     return this.httpService.post(
       'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=97967658-62ad-4ee8-9df7-0096e2c60452',
+      // `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${process.env.WECHAT_GITHUB_ROBOT_KEY}`,
       json,
     )
     .pipe(map(res => {
