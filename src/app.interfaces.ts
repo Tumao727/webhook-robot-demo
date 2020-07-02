@@ -3,12 +3,14 @@ export type MsgType = 'text' | 'markdown' | undefined;
 
 export interface IParam {
   action: string;
-  sender: ISender;
+  sender: IUser;
   repository: IRepository;
   issue?: IIssue;
+  pull_request?: IPullRequest;
+  review?: IReview;
 }
 
-export interface ISender {
+export interface IUser {
   login: string;
 }
 
@@ -36,11 +38,24 @@ export interface IMessageContent {
 
 export interface IIssue {
   url: string;
-  user: IUser;
   assignee: IUser;
 }
 
-export interface IUser {
-  login: string;
+export interface IPullRequest {
+  title: string;
+  html_url: string;
+  head: IBranchInfo;
+  base: IBranchInfo;
+  assignee: IUser;
+  merged: boolean;
+}
+
+export interface IBranchInfo {
+  ref: string
+}
+
+export interface IReview {
+  html_url: string;
+  state: string;
 }
 
