@@ -8,7 +8,7 @@ export class AppController {
 
   @Post()
   async getWebhook(@Body() params: IParam, @Headers() headers: IHeader) {
-    const type: Type = headers['x-github-event']
+    const type: Type = headers['X-GitHub-Event'];
     
     return this.appService.sendMsg(params, type)
   }
