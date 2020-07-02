@@ -1,46 +1,94 @@
 import { Injectable, HttpService } from '@nestjs/common';
-import { map } from 'rxjs/operators'
+import { IParam, Type, IMessageInfo, IRepository, IUser } from './app.interfaces';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AppService {
   constructor(private httpService: HttpService) {}
 
-  getHello(): string {
-    return 'original information';
-  }
-
-  private async sendMsg(json) {
+  private async _requestSendMsgToChatbot(json) {
     return this.httpService.post(
       'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=97967658-62ad-4ee8-9df7-0096e2c60452',
       json,
-    ).pipe(map(res => {
-      console.log('res data', res.data)
+    )
+    .pipe(map(res => {
+      if (res.data.errcode !== 0) {
+        throw new Error(res.data.errmsg)
+      }
+      return res.data
     }))
+    .toPromise()
   }
 
-  public async formatMsg(param, type) {
-    const testInfo = {
-      msgtype: 'text',
-      text: {
-        content: '发送测试消息！！！',
-        mentioned_list: ['@all'],
-      },
-    };
+  private _getCommonContent(repo: IRepository, sender: IUser, action: string, assignee: IUser): string {
+    const content: string =
+     `Repository Detail: ${repo.html_url}
+      Action: ${action}
+      Sender: ${sender.login}
+      Assignee: ${assignee && assignee.login || '--'}
+    `
 
-    console.log('--- type ---', type)
+    return content
+  }
 
-    if (type === 'issues') {
+  private _formatIssueContent(param: IParam): string {
+    const {repository, issue, sender, action} = param
 
-      const textMap = {
-        assigned: `${param.issue.user.login} 将 issue (${param.issue.url}) 指给了${param.issue.assignee.login}`,
-        unassigned: `${param.issue.user.login} 解除了 issue (${param.issue.url}) 指派人`,
-        closed: `${param.issue.user.login} 关闭了 issue (${param.issue.url})`,
-        reopened: `${param.issue.user.login} 重新打开了 issue (${param.issue.url})`,
-        opened: `${param.issue.user.login} 提了新 issue (${param.issue.url})`
-      }
-      testInfo.text.content = textMap[param.action];
+    const content: string = `
+      Type: Issue
+      Issue Detail: ${issue.url}
+      ${this._getCommonContent(repository, sender, action, issue.assignee)}
+    `
+
+    return content;
+  }
+
+  private _formatPrContent(param: IParam): string {
+    const {repository, pull_request, sender, action} = param
+
+    const content: string = `
+      Type: Pull Request
+      PR Title: ${pull_request.title}
+      PR Detail: ${pull_request.html_url}
+      ${this._getCommonContent(repository, sender, action, pull_request.assignee)}
+    `
+
+    return content
+  }
+
+  private _formatPrReviewContent(param: IParam): string {
+    const {repository, pull_request, sender, action, review} = param;
+
+    const content: string = `
+      Type: Pull Request Review
+      PR Detail: ${pull_request.html_url}
+      Review Detail: ${review.html_url}
+      ${this._getCommonContent(repository, sender, action, pull_request.assignee)}
+    `
+
+    return content
+  }
+
+  public async sendMsg(param: IParam, type: Type) {
+    const funcMapToGetContent = {
+      issues: this._formatIssueContent.bind(this),
+      pull_request: this._formatPrContent.bind(this),
+      pull_request_review: this._formatPrReviewContent.bind(this),
     }
 
-    return await this.sendMsg(testInfo)
+    const msg: IMessageInfo = {
+      msgtype: 'text',
+      text: {
+        content: `Github Change Report\n${funcMapToGetContent[type](param)}`,
+        mentioned_list: ['@all']
+      },
+    }
+
+    try {
+      return await this._requestSendMsgToChatbot(msg)
+    } catch (err) {
+      throw err
+    }
+
   }
 }
