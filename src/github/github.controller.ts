@@ -9,7 +9,6 @@ export class GithubController {
 
   @Post()
   async getWebhook(@Body() params: IParam, @Headers() headers: IHeader): Promise<IRes> {
-    console.log('headers', headers)
     const type: Type = headers['x-github-event'];
 
     return this.githubService.sendMsg(params, type)
