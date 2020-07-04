@@ -20,9 +20,9 @@ export interface IRepository {
 }
 
 export interface IHeader {
-  'X-GitHub-Event': Type;
-  'X-GitHub-Delivery': string;
-  'X-Hub-Signature': string;
+  'x-gitgub-event': Type;
+  'x-gitgub-delivery': string;
+  'x-hub-signature': string;
 }
 
 export interface IMessageInfo {
@@ -57,5 +57,10 @@ export interface IBranchInfo {
 export interface IReview {
   html_url: string;
   state: string;
+}
+
+export interface IRes {
+  errcode: number;
+  errmsg: string;
 }
 

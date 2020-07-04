@@ -1,9 +1,10 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { GithubModule } from './github/github/github.module';
 
 @Module({
-  imports: [HttpModule],
+  imports: [GithubModule],
   controllers: [AppController],
   providers: [AppService],
 })
