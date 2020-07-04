@@ -1,15 +1,12 @@
-import { Controller, Post, Body, Headers } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { IParam, IHeader, Type } from './app.interfaces';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post()
-  async getWebhook(@Body() params: IParam, @Headers() headers: IHeader) {
-    const type: Type = headers['X-GitHub-Event'];
-    
-    return this.appService.sendMsg(params, type)
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
   }
 }
