@@ -21,12 +21,10 @@ export class GithubService {
   }
 
   private _getCommonContent(repo: IRepository, sender: IUser, action: string, assignee: IUser): string {
-    const content =
-     `Repository Detail: ${repo.html_url}
-      Action: ${action}
-      Sender: ${sender.login}
-      Assignee: ${assignee && assignee.login || '--'}
-    `
+    const content = `Repository Detail: ${repo.html_url}
+    Action: ${action}
+    Sender: ${sender.login}
+    Assignee: ${assignee && assignee.login || '--'}`
 
     return content
   }
@@ -34,11 +32,10 @@ export class GithubService {
   private _formatIssueContent(param: IParam): string {
     const {repository, issue, sender, action} = param
 
-    const content = `
-      Type: Issue
-      Issue Detail: ${issue.url}
-      ${this._getCommonContent(repository, sender, action, issue.assignee)}
-    `
+    const content = 
+    `Type: Issue
+    Issue Detail: ${issue.url}
+    ${this._getCommonContent(repository, sender, action, issue.assignee)}`
 
     return content;
   }
@@ -46,12 +43,10 @@ export class GithubService {
   private _formatPrContent(param: IParam): string {
     const {repository, pull_request, sender, action} = param
 
-    const content = `
-      Type: Pull Request
-      PR Title: ${pull_request.title}
-      PR Detail: ${pull_request.html_url}
-      ${this._getCommonContent(repository, sender, action, pull_request.assignee)}
-    `
+    const content = `Type: Pull Request
+    PR Title: ${pull_request.title}
+    PR Detail: ${pull_request.html_url}
+    ${this._getCommonContent(repository, sender, action, pull_request.assignee)}`
 
     return content
   }
@@ -59,12 +54,10 @@ export class GithubService {
   private _formatPrReviewContent(param: IParam): string {
     const {repository, pull_request, sender, action, review} = param;
 
-    const content = `
-      Type: Pull Request Review
-      PR Detail: ${pull_request.html_url}
-      Review Detail: ${review.html_url}
-      ${this._getCommonContent(repository, sender, action, pull_request.assignee)}
-    `
+    const content = `Type: Pull Request Review
+    PR Detail: ${pull_request.html_url}
+    Review Detail: ${review.html_url}
+    ${this._getCommonContent(repository, sender, action, pull_request.assignee)}`
 
     return content
   }
