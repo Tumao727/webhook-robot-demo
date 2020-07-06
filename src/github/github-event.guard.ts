@@ -41,7 +41,7 @@ export class GitHubEventsGuard implements CanActivate {
   }
 
   private _checkSignature(signature: string, payload: any): boolean {
-    const token: string = process.env.GITHUB_WEBHOOK_SECRET
+    const token: string = process.env.GITHUB_WEBHOOK_SECRET_TOKEN
 
     const hmac = createHmac('sha1', token)
     const digest = 'sha1=' + hmac.update(JSON.stringify(payload)).digest('hex');
