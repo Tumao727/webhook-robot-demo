@@ -20,8 +20,8 @@ export interface IRepository {
 }
 
 export interface IHeader {
-  'x-gitgub-event': Type;
-  'x-gitgub-delivery': string;
+  'x-github-event': Type;
+  'x-github-delivery': string;
   'x-hub-signature': string;
 }
 
