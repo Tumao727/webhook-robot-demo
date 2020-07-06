@@ -11,7 +11,7 @@ export class GithubController {
   constructor(private readonly githubService: GithubService) {}
 
   @UseGuards(GitHubEventsGuard)
-  @GithubWebhookEvents(['issues'])
+  @GithubWebhookEvents(['issues', 'pull_request', 'pull_request_review'])
   @Post()
   async getWebhook(@Body() params: IParam, @Headers() headers: IHeader): Promise<IRes> {
     const type: Type = headers['x-github-event'];
