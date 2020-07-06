@@ -21,10 +21,18 @@ export class GitHubEventsGuard implements CanActivate {
     const signature: string = request.headers['x-hub-signature'];
     const githubEvent: Type = request.headers['x-github-event'];
 
-    return this._checkValid(signature, githubEvent, restrictedEvents, request.body)
+    const {secretToken} = request.params
+
+    return this._checkValid(signature, githubEvent, restrictedEvents, request.body, secretToken)
   }
 
-  private _checkValid(signature: string, githubEvent: Type, restrictedEvents: Type[], payload: any): boolean {
+  private _checkValid(
+    signature: string,
+    githubEvent: Type,
+    restrictedEvents: Type[],
+    payload: any,
+    secretToken: string
+  ): boolean {
     if (!signature) {
       throw new UnauthorizedException(
         `This request doesn't contain a github signature`,
@@ -37,16 +45,15 @@ export class GitHubEventsGuard implements CanActivate {
       )
     }
 
-    return this._checkSignature(signature, payload);
+    return this._checkSignature(signature, payload, secretToken);
   }
 
-  private _checkSignature(signature: string, payload: any): boolean {
-    const token: string = process.env.GITHUB_WEBHOOK_SECRET_TOKEN
+  private _checkSignature(signature: string, payload: any, secretToken: string): boolean {
 
-    const hmac = createHmac('sha1', token)
+    const hmac = createHmac('sha1', secretToken)
     const digest = 'sha1=' + hmac.update(JSON.stringify(payload)).digest('hex');
 
-    if (!token || signature !== digest) {
+    if (!secretToken || signature !== digest) {
       throw new UnauthorizedException(
         `Request body digest (${digest}) does not match ${signature}`,
       );

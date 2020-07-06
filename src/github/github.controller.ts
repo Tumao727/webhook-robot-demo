@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Headers, UseGuards, Param } from '@nestjs/common';
 import { IParam, IHeader, Type, IRes } from './github.interfaces';
 import { GithubService } from './github.service';
 import { GitHubEventsGuard } from './github-event.guard';
@@ -12,10 +12,14 @@ export class GithubController {
 
   @UseGuards(GitHubEventsGuard)
   @GithubWebhookEvents(['issues', 'pull_request', 'pull_request_review'])
-  @Post()
-  async getWebhook(@Body() params: IParam, @Headers() headers: IHeader): Promise<IRes> {
+  @Post(':robotToken/:secretToken')
+  async getWebhook(
+    @Body() params: IParam,
+    @Headers() headers: IHeader,
+    @Param('robotToken') robotToken: string,
+  ): Promise<IRes> {
     const type: Type = headers['x-github-event'];
-
-    return this.githubService.sendMsg(params, type)
+    
+    return this.githubService.sendMsg(params, type, robotToken);
   }
 }

@@ -6,10 +6,10 @@ import { map } from 'rxjs/operators';
 export class GithubService {
   constructor(private httpService: HttpService) {}
 
-  private async _requestSendMsgToChatbot(json): Promise<IRes> {
+  private async _requestSendMsgToChatbot(data: IMessageInfo, robotToken: string): Promise<IRes> {
     return this.httpService.post(
-      `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${process.env.WECHAT_GITHUB_ROBOT_KEY}`,
-      json,
+      `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${robotToken}`,
+      data,
     )
     .pipe(map(res => {
       if (res.data.errcode !== 0) {
@@ -50,7 +50,7 @@ export class GithubService {
     return content
   }
 
-  public async sendMsg(param: IParam, type: Type): Promise<IRes> {
+  public async sendMsg(param: IParam, type: Type, robotToken: string): Promise<IRes> {
     
     const funcMapToGetContent = {
       issues: this._formatIssueContent.bind(this),
@@ -67,7 +67,7 @@ export class GithubService {
     }
 
     try {
-      return await this._requestSendMsgToChatbot(msg)
+      return await this._requestSendMsgToChatbot(msg, robotToken)
     } catch (err) {
       throw err
     }
