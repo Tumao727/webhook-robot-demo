@@ -1,5 +1,15 @@
-export type Type = 'issues' | 'pull_request' | 'pull_request_review' | undefined;
+export type Type =
+  | 'issues'
+  | 'pull_request'
+  | 'pull_request_review'
+  | undefined;
 export type MsgType = 'text' | 'markdown' | undefined;
+export type ActionType =
+  | 'opened'
+  | 'closed'
+  | 'edited'
+  | 'assigned'
+  | undefined;
 
 export interface IParam {
   action: string;
@@ -33,7 +43,7 @@ export interface IMessageInfo {
 export interface IMessageContent {
   content: string;
   mentioned_list?: string[];
-  mentioned_mobile_list?: string[]
+  mentioned_mobile_list?: string[];
 }
 
 export interface IIssue {
@@ -51,7 +61,7 @@ export interface IPullRequest {
 }
 
 export interface IBranchInfo {
-  ref: string
+  ref: string;
 }
 
 export interface IReview {
@@ -63,4 +73,3 @@ export interface IRes {
   errcode: number;
   errmsg: string;
 }
-
