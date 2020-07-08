@@ -52,7 +52,7 @@ export class GithubService {
     const { repository, issue, sender, action } = param;
 
     const content = `Issue Change\n\nIssue Detail: ${
-      issue.url
+      issue.html_url
     }\n${this._getCommonContent(repository, sender, action, issue.assignee)}`;
 
     return content;

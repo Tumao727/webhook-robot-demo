@@ -47,7 +47,7 @@ export interface IMessageContent {
 }
 
 export interface IIssue {
-  url: string;
+  html_url: string;
   assignee: IUser;
 }
 
