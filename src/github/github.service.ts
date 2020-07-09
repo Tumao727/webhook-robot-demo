@@ -38,9 +38,8 @@ export class GithubService {
     sender: IUser,
     action: string,
     assignee: IUser,
-    title: string,
   ): string {
-    const content = `Title: ${title}\nRepository Detail: ${
+    const content = `Repository Detail: ${
       repo.html_url
     }\nAction: ${action}\nSender: ${sender.login}\nAssignee: ${(assignee &&
       assignee.login) ||
@@ -52,14 +51,13 @@ export class GithubService {
   private _formatIssueContent(param: IParam): string {
     const { repository, issue, sender, action } = param;
 
-    const content = `Issue Change\n\nIssue Detail: ${
-      issue.html_url
-    }\n${this._getCommonContent(
+    const content = `Issue Change\n\nIssue Title: ${
+      issue.title
+    }\nIssue Detail: ${issue.html_url}\n${this._getCommonContent(
       repository,
       sender,
       action,
       issue.assignee,
-      issue.title,
     )}`;
 
     return content;
@@ -75,7 +73,6 @@ export class GithubService {
       sender,
       action,
       pull_request.assignee,
-      pull_request.title,
     )}`;
 
     return content;
@@ -91,7 +88,6 @@ export class GithubService {
       sender,
       action,
       pull_request.assignee,
-      pull_request.title,
     )}`;
 
     return content;
