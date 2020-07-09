@@ -49,6 +49,7 @@ export interface IMessageContent {
 export interface IIssue {
   html_url: string;
   assignee: IUser;
+  title: string;
 }
 
 export interface IPullRequest {

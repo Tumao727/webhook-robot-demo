@@ -51,9 +51,14 @@ export class GithubService {
   private _formatIssueContent(param: IParam): string {
     const { repository, issue, sender, action } = param;
 
-    const content = `Issue Change\n\nIssue Detail: ${
-      issue.html_url
-    }\n${this._getCommonContent(repository, sender, action, issue.assignee)}`;
+    const content = `Issue Change\n\nIssue Title: ${
+      issue.title
+    }\nIssue Detail: ${issue.html_url}\n${this._getCommonContent(
+      repository,
+      sender,
+      action,
+      issue.assignee,
+    )}`;
 
     return content;
   }
